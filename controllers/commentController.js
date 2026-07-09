@@ -1,3 +1,5 @@
+const db = require("../models/dbQuery");
+
 // reads all comments in database and sends back a json
 const readAllComments = async (req, res) => {
     res.json({

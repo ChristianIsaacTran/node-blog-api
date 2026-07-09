@@ -1,3 +1,5 @@
+const db = require("../models/dbQuery");
+
 // read all posts and sends back a json
 const readAllPosts = async (req, res) => {
   res.json({

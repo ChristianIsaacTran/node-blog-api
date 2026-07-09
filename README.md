@@ -36,3 +36,9 @@ relations:
     - User to Posts: one-to-many
     - User to Comments: one-to-many
     - Post to Comments: one-to-many
+
+## testing routes
+
+- Currently using the Postman application to send custom json body to the api endpoints to check if it works.
+
+- Also used the express.json() middleware to parse the json files instead of urlencoder because front end is handling that for now.

@@ -1,3 +1,5 @@
+const db = require("../models/dbQuery");
+
 // reads all users and sends the users in a json
 const readAllUsers = async (req, res) => {
   res.json({
@@ -14,6 +16,13 @@ const readUser = async (req, res) => {
 
 // creates a user and inserts it into the database. Sends back a json to confirm
 const createUser = async (req, res) => {
+  
+  const username = req.body.username;
+
+  const password = req.body.password;
+
+  await db.createUser(username, password);
+
   res.json({
     testUser: "on createUser",
   });
