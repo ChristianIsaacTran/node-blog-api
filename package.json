@@ -17,5 +17,17 @@
   "bugs": {
     "url": "https://github.com/ChristianIsaacTran/node-blog-api/issues"
   },
-  "homepage": "https://github.com/ChristianIsaacTran/node-blog-api#readme"
+  "homepage": "https://github.com/ChristianIsaacTran/node-blog-api#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "prisma": "^7.8.0"
+  }
 }
