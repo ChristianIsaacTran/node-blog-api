@@ -16,16 +16,23 @@ const readUser = async (req, res) => {
 
 // creates a user and inserts it into the database. Sends back a json to confirm
 const createUser = async (req, res) => {
-  
   const username = req.body.username;
 
   const password = req.body.password;
 
-  await db.createUser(username, password);
+  const createBool = await db.createUser(username, password);
 
-  res.json({
-    testUser: "on createUser",
-  });
+  if (createBool) {
+    res.json({
+      testUser: "on createUser",
+      createdUser: "true",
+    });
+  } else {
+    res.json({
+      testUser: "on createUser",
+      createdUser: "false",
+    });
+  }
 };
 
 // updates user based on userId and sends back json to confirm
