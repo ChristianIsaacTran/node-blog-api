@@ -140,3 +140,5 @@ relations:
             - note: the {session: false} is an option that HAS to be toggled for both the local-strategy and the "jwt" strategy because by default, passport assumes session storage instead of jwt, so I have to specify it or else passport will have errors with non-existent sessions.
 
             - explaination of how to configure the passport-jwt strategy is in comments in the "passportConfig.js" file.
+
+- Note: also when creating and signing the jwt, if the jwt has an expiration on the options, it will be encoded into the jwt itself. I can see the expiration and the "iat" (short for issued at) when the jwt is decoded in passportConfig.js under the jwt strategy.
