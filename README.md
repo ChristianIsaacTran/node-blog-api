@@ -52,7 +52,7 @@ relations:
 
           note.js api authentication with JWT:
 
-          https://www.youtube.com/watch?v=7nafaH9SddU&t=7s
+          [Youtube](https://www.youtube.com/watch?v=7nafaH9SddU&t=7s)
 
 - jwt.sign(payload, secretkey, callback(error, token));
 
@@ -80,5 +80,63 @@ relations:
 
         - secretOrPublicKey: Needs to be the same secret key that was used to create the token for verification. As long as the secret key is the same and the token hasn't been tampered with, it will attempt to check and decode the payload if it is valid.
 
-        - callback(error, authData): A callback that is used to give access to the decoded payload, so the payload that was set during the jwt.sign(), will be decoded, and then the server can 
+        - callback(error, authData): A callback that is used to give access to the decoded payload, so the payload that was set during the jwt.sign(), will be decoded, and then the server can
         use that user info to send back information or perform operations on protected routes with payload data.
+
+## jwt token creation and the two methods for verification
+
+- So from what I've learned from reading the documentation of jsonwebtoken library and the passport-jwt strategy,
+  is that creation happens when the user logs in successfully, but should happen OUTSIDE the passport local-strategy function as a
+  middleware after.
+
+        - inside authController.js
+
+        const loginUser = [
+            passport.authenticate("local", { session: false }),
+            async (req, res) => {
+
+                jwt.sign(payload, secretkey, tokenCallbackForAsync
+                (error, token) {
+
+                    res.json({
+                        token: newlyMadeJwtToken
+                    });
+                });
+            }
+        ];
+
+        passport.authenticate() uses the local strategy to log the user in normally, then after that if successful, calls next() to move onto the next middleware which contains the jwt.sign(). jwt.sign() requires a payload (which contains unique user info to lookup the user later, but NO SENSITIVE INFO. maybe a userid or something). Then a secretkey to generate the jwt. secretkey MUST BE THE SAME ON CREATION OR AUTHORIZATION, so keep the secretkey in a .env. Then the token callback which on creation, contains two parameters, error and the actual jwt token. This way, WITHIN the callback, I can use res.json({}) to send the token back to the user, and Voila! The user now has a newly generated jwt token for access. I will add options later to set the jwt to expire.
+
+- Then, once the user gets the jwt token back and saves it somewhere, (in my case, I am going to save the jwt token in the localstorage in the front-end), then I can make requests to the back-end REST api by putting the token into the request header under "authorization" in the "bearer" format.
+
+        - ex: on the front-end
+
+        inside request header on front-end:
+
+        "authorization": "bearer [jwt token goes here, stored in localStorage]
+
+- Now that the token is generated for logged in users, ANY route on the backend I want to keep private, I just have to add a step to verify the incoming jwt token from the request header, but there are two ways I can do this:
+
+        way 1. The jsonwebtoken library:
+
+        The jsonwebtoken library has a
+
+        jwt.verify(token, secretkey, callback(error, payload) => {});
+
+            - inserting the jwt token into the .verify() function with
+            the SAME secretkey that was used during creation of the
+            jwt decodes the payload from it, and puts it into the
+            callback function as the "payload". Theres also an error
+            parameter that I can use to have error handling upon unsuccessful verify of the jwt (could send back a res.status(403) to indicate unauthorization).
+
+        way 2. The passport-jwt strategy (I did this one):
+
+            - using the passport-jwt strategy from npm, I defined that strategy as an extra strategy in passportConfig.js alongside the local-strategy. Once defined, I can use the passport.authenticate(), but specify to use the "jwt" strategy by:
+
+            passport.authenticate("jwt", {session: false});
+
+            - putting passport.authenticate() on ANY routes I want protected will check for the jwt token. If its not verified, then it will prevent the user from accessing that route.
+
+            - note: the {session: false} is an option that HAS to be toggled for both the local-strategy and the "jwt" strategy because by default, passport assumes session storage instead of jwt, so I have to specify it or else passport will have errors with non-existent sessions.
+
+            - explaination of how to configure the passport-jwt strategy is in comments in the "passportConfig.js" file.
