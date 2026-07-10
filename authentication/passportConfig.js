@@ -51,6 +51,9 @@ const options = {
 passport.use(
   new JwtStrategy(options, async (payload, done) => {
     try {
+
+    //   console.log(payload);
+
       const searchUserName = payload.username; //extracted from jwtFromRequest option. In this case, from the authorization header next to "bearer" scheme
 
       const user = await db.findUser(searchUserName);
@@ -62,7 +65,9 @@ passport.use(
         return done(null, false);
       }
 
-      console.log("Successful User found on restricted route. User logged in and authorized.");
+      console.log(
+        "Successful User found on restricted route. User logged in and authorized.",
+      );
 
       // successful user find
       return done(null, user);

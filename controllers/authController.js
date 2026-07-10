@@ -11,12 +11,14 @@ const loginUser = [
     // if passport.authenticate succesfully signs in user, req.user should be populated. Make a json web token (JWT) and send token to the user
     const jwtSecretKey = process.env.JWT_SK;
 
+    // jwt token creation after succesful login
     jwt.sign(
       {
         userId: req.user.id,
         username: req.user.username,
       },
       jwtSecretKey,
+      { expiresIn: "10h" },
       (error, token) => {
         if (error) {
           console.log("JWT .sign() failed.");
@@ -54,4 +56,4 @@ const testJwtStrat = [
   },
 ];
 
-module.exports = { loginUser, logoutUser, testJwtStrat};
+module.exports = { loginUser, logoutUser, testJwtStrat };
