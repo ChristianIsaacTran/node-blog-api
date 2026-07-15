@@ -80,7 +80,7 @@ const findUserThroughId = async (userId) => {
 };
 
 // finds user through Id and updates their username. Returns a success with updated user info or error message
-const updateThroughId = async (updatedUserName, userId) => {
+const updateUserThroughId = async (updatedUserName, userId) => {
   try {
     const userIdInt = parseInt(userId);
 
@@ -114,5 +114,6 @@ module.exports = {
   findUser,
   findAllUsers,
   findUserThroughId,
-  updateThroughId,
+  updateUserThroughId,
+  deleteUserThroughId
 };

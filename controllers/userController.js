@@ -50,7 +50,7 @@ const updateUser = [
 
     const searchUserId = req.params.userId;
 
-    const updateResult = await db.updateThroughId(
+    const updateResult = await db.updateUserThroughId(
       updatedUserName,
       searchUserId,
     );
@@ -62,10 +62,18 @@ const updateUser = [
 ];
 
 // deletes the current signed in user. Sends back a json to confirm
-const deleteUser = async (req, res) => {
-  res.json({
-    testUser: "on deleteUser",
-  });
-};
+const deleteUser = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+
+    const currentUserId = req.user.id;
+
+    const deletedUser = await db.deleteUserThroughId();
+
+    res.json({
+      testUser: "on deleteUser",
+    });
+  },
+];
 
 module.exports = { readAllUsers, readUser, createUser, updateUser, deleteUser };
