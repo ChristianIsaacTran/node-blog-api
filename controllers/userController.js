@@ -2,8 +2,11 @@ const db = require("../models/dbQuery");
 
 // reads all users and sends the users in a json
 const readAllUsers = async (req, res) => {
+
+  const allUsers = await db.findAllUsers();
+
   res.json({
-    testUser: "on readAllUsers",
+    ...allUsers
   });
 };
 

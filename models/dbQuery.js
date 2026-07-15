@@ -44,4 +44,16 @@ const createUser = async (username, password) => {
   }
 };
 
-module.exports = { createUser, findUser };
+// returns all users found in the database
+const findAllUsers = async () => {
+  try {
+    const allUsers = await prisma.user.findMany({});
+
+    return allUsers;
+
+  } catch(error) {
+    return console.log(error);
+  }
+};
+
+module.exports = { createUser, findUser, findAllUsers };
