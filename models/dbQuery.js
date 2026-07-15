@@ -79,4 +79,40 @@ const findUserThroughId = async (userId) => {
   }
 };
 
-module.exports = { createUser, findUser, findAllUsers, findUserThroughId };
+// finds user through Id and updates their username. Returns a success with updated user info or error message
+const updateThroughId = async (updatedUserName, userId) => {
+  try {
+    const userIdInt = parseInt(userId);
+
+    // update user username for specific user through userId
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userIdInt,
+      },
+      data: {
+        username: updatedUserName,
+      },
+    });
+
+    if (updatedUser) {
+      return updatedUser;
+    } else {
+      return {
+        error: "User not found/failed to update.",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "User not found/failed to update.",
+    };
+  }
+};
+
+module.exports = {
+  createUser,
+  findUser,
+  findAllUsers,
+  findUserThroughId,
+  updateThroughId,
+};

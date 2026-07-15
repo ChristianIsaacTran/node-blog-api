@@ -1,24 +1,23 @@
 const db = require("../models/dbQuery");
+const { passport } = require("../authentication/passportConfig");
 
 // reads all users and sends the users in a json
 const readAllUsers = async (req, res) => {
-
   const allUsers = await db.findAllUsers();
 
   res.json({
-    ...allUsers
+    ...allUsers,
   });
 };
 
 // reads a single user based on userId and sends back a json
 const readUser = async (req, res) => {
-
   const userId = req.params.userId;
 
   const foundUser = await db.findUserThroughId(userId);
 
   res.json({
-    ...foundUser
+    ...foundUser,
   });
 };
 
@@ -43,12 +42,24 @@ const createUser = async (req, res) => {
   }
 };
 
-// updates user based on userId and sends back json to confirm
-const updateUser = async (req, res) => {
-  res.json({
-    testUser: "on updateUser",
-  });
-};
+// (JWT) updates user based on userId and sends back json to confirm
+const updateUser = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const updatedUserName = req.body.username;
+
+    const searchUserId = req.params.userId;
+
+    const updateResult = await db.updateThroughId(
+      updatedUserName,
+      searchUserId,
+    );
+
+    res.json({
+      ...updateResult,
+    });
+  },
+];
 
 // deletes the current signed in user. Sends back a json to confirm
 const deleteUser = async (req, res) => {

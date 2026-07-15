@@ -14,6 +14,7 @@ const loginUser = [
     // jwt token creation after succesful login
     jwt.sign(
       {
+        //token payload info
         userId: req.user.id,
         username: req.user.username,
       },
