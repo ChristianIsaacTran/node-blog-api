@@ -12,8 +12,13 @@ const readAllUsers = async (req, res) => {
 
 // reads a single user based on userId and sends back a json
 const readUser = async (req, res) => {
+
+  const userId = req.params.userId;
+
+  const foundUser = await db.findUserThroughId(userId);
+
   res.json({
-    testUser: "on readUser",
+    ...foundUser
   });
 };
 

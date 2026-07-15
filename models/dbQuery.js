@@ -50,10 +50,33 @@ const findAllUsers = async () => {
     const allUsers = await prisma.user.findMany({});
 
     return allUsers;
-
-  } catch(error) {
+  } catch (error) {
     return console.log(error);
   }
 };
 
-module.exports = { createUser, findUser, findAllUsers };
+// finds and returns a user based on userId, or sends back an error message
+const findUserThroughId = async (userId) => {
+  try {
+    // req.params.userId is a string, so convert to integer for prisma where filter
+    const userIdInt = parseInt(userId);
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userIdInt,
+      },
+    });
+
+    if (user) {
+      return user;
+    } else {
+      return {
+        error: "User not found.",
+      };
+    }
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+module.exports = { createUser, findUser, findAllUsers, findUserThroughId };
