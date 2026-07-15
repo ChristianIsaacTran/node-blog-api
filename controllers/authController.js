@@ -40,13 +40,13 @@ const loginUser = [
 ];
 
 // logs the user out
-const logoutUser = async (req, res) => {
+const logoutUser =  async (req, res) => {
   console.log(req.body);
   res.send("logout attempt");
 };
 
 // tests jwt strategy by using passport.authenticate("jwt", {sessions: false}). Sends a "success!" json if authorization went through
-// MAKE SURE TO SEND GENERATED TOKEN IN REQUEST HEADER UNDER AUTHORIZATION WHEN TESTING
+// MAKE SURE TO SEND GENERATED TOKEN IN REQUEST HEADER UNDER AUTHORIZATION WITH BEARER WHEN TESTING
 const testJwtStrat = [
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
