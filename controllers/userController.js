@@ -61,17 +61,17 @@ const updateUser = [
   },
 ];
 
-// deletes the current signed in user. Sends back a json to confirm
+// deletes the current signed in user. Sends back a json of deleted user to confirm
 const deleteUser = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
 
     const currentUserId = req.user.id;
 
-    const deletedUser = await db.deleteUserThroughId();
+    const deletedUser = await db.deleteUserThroughId(currentUserId);
 
     res.json({
-      testUser: "on deleteUser",
+      ...deletedUser
     });
   },
 ];

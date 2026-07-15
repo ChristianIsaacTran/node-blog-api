@@ -109,6 +109,34 @@ const updateUserThroughId = async (updatedUserName, userId) => {
   }
 };
 
+// finds the current user through id and deletes their record from db. Returns deleted user or error
+const deleteUserThroughId = async (currentUserId) => {
+  try {
+    
+    const deletedUser = await prisma.user.delete({
+      where: {
+        id: currentUserId
+      }
+    });
+
+    if(deletedUser) {
+      return  deletedUser;
+    } else {
+      return {
+        error: "User not found/failed to delete current user"
+      };
+    }
+
+  } catch (error) {
+    console.log(error);
+
+    return {
+        error: "User not found/failed to delete current user"
+      };
+  }
+
+};
+
 module.exports = {
   createUser,
   findUser,
