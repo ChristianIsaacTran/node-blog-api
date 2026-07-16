@@ -19,10 +19,10 @@ const readPost = async (req, res) => {
 const createPost = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await db.createPost(req);
+    const newPost = await db.createPost(req);
 
     res.json({
-      testPost: "on createPost",
+      ...newPost
     });
   },
 ];

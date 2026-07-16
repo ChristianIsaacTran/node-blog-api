@@ -175,6 +175,8 @@ const createPost = async (req) => {
   }
 };
 
+// readAllPosts gets all posts from the database and returns it
+
 module.exports = {
   createUser,
   findUser,
