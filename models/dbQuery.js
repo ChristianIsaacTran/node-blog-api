@@ -112,29 +112,67 @@ const updateUserThroughId = async (updatedUserName, userId) => {
 // finds the current user through id and deletes their record from db. Returns deleted user or error
 const deleteUserThroughId = async (currentUserId) => {
   try {
-    
     const deletedUser = await prisma.user.delete({
       where: {
-        id: currentUserId
-      }
+        id: currentUserId,
+      },
     });
 
-    if(deletedUser) {
-      return  deletedUser;
+    if (deletedUser) {
+      return deletedUser;
     } else {
       return {
-        error: "User not found/failed to delete current user"
+        error: "User not found/failed to delete current user",
       };
     }
-
   } catch (error) {
     console.log(error);
 
     return {
-        error: "User not found/failed to delete current user"
-      };
+      error: "User not found/failed to delete current user",
+    };
   }
+};
 
+// creates a post and inserts entry into db
+const createPost = async (req) => {
+  try {
+    // extract req.body form fields
+    const postTitle = req.body.title;
+    const postText = req.body.text;
+    const datePosted = new Date(req.body.datePosted).toISOString();
+    const reqBool = req.body.postedStatus;
+    const userId = req.user.id; //current userId
+
+    // set boolean post status
+    let postStatus;
+
+    if(reqBool === "true") {
+      postStatus = true;
+    } else {
+      postStatus = false;
+    }
+
+    const newPost = await prisma.post.create({
+      data: {
+        title: postTitle,
+        postText: postText,
+        datePosted: datePosted,
+        posted: postStatus,
+        userId: userId,
+      },
+    });
+
+    if (newPost) {
+      return newPost;
+    } else {
+      return {
+        error: "Post could not be created.",
+      };
+    }
+  } catch (error) {
+    return console.log(error);
+  }
 };
 
 module.exports = {
@@ -143,5 +181,6 @@ module.exports = {
   findAllUsers,
   findUserThroughId,
   updateUserThroughId,
-  deleteUserThroughId
+  deleteUserThroughId,
+  createPost,
 };

@@ -1,4 +1,5 @@
 const db = require("../models/dbQuery");
+const { passport } = require("../authentication/passportConfig");
 
 // read all posts and sends back a json
 const readAllPosts = async (req, res) => {
@@ -15,11 +16,16 @@ const readPost = async (req, res) => {
 };
 
 // creates a new post and inserts it into the database. Sends back a json to confirm
-const createPost = async (req, res) => {
-  res.json({
-    testPost: "on createPost",
-  });
-};
+const createPost = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await db.createPost(req);
+
+    res.json({
+      testPost: "on createPost",
+    });
+  },
+];
 
 // updates a new post based on postId and sends back json to confirm
 const updatePost = async (req, res) => {
