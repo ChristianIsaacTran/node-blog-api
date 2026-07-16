@@ -3,8 +3,10 @@ const { passport } = require("../authentication/passportConfig");
 
 // read all posts and sends back a json
 const readAllPosts = async (req, res) => {
+  const allPosts = await db.readAllPosts();
+
   res.json({
-    testPost: "on readAllPosts",
+    ...allPosts,
   });
 };
 
@@ -22,7 +24,7 @@ const createPost = [
     const newPost = await db.createPost(req);
 
     res.json({
-      ...newPost
+      ...newPost,
     });
   },
 ];

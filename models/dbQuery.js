@@ -147,7 +147,7 @@ const createPost = async (req) => {
     // set boolean post status
     let postStatus;
 
-    if(reqBool === "true") {
+    if (reqBool === "true") {
       postStatus = true;
     } else {
       postStatus = false;
@@ -176,6 +176,21 @@ const createPost = async (req) => {
 };
 
 // readAllPosts gets all posts from the database and returns it
+const readAllPosts = async () => {
+  try {
+    const allPosts = await prisma.post.findMany({});
+
+    if (allPosts) {
+      return allPosts;
+    } else {
+      return {
+        error: "Posts cannot read/find any posts to return",
+      };
+    }
+  } catch (error) {
+    return console.log(error);
+  }
+};
 
 module.exports = {
   createUser,
@@ -185,4 +200,5 @@ module.exports = {
   updateUserThroughId,
   deleteUserThroughId,
   createPost,
+  readAllPosts,
 };
