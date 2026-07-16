@@ -11,15 +11,18 @@ const readAllPosts = async (req, res) => {
 };
 
 // reads a single post based on postId and sends back a json
-const readPost = async (req, res) => {
-  const postId = req.params.postId;
+const readPost = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const postId = req.params.postId;
 
-  const post = await db.readPost(postId);
+    const post = await db.readPost(postId);
 
-  res.json({
-    ...post,
-  });
-};
+    res.json({
+      ...post,
+    });
+  },
+];
 
 // creates a new post and inserts it into the database. Sends back a json to confirm
 const createPost = [
