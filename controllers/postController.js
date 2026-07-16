@@ -40,17 +40,23 @@ const createPost = [
 ];
 
 // updates a new post based on postId and sends back json to confirm
-const updatePost = async (req, res) => {
-  res.json({
-    testPost: "on updatePost",
-  });
-};
+const updatePost = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    res.json({
+      testPost: "on updatePost",
+    });
+  },
+];
 
 // delete a new post based on postId and sends back json to confirm
-const deletePost = async (req, res) => {
-  res.json({
-    testPost: "on deletePost",
-  });
-};
+const deletePost = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    res.json({
+      testPost: "on deletePost",
+    });
+  },
+];
 
 module.exports = { readAllPosts, readPost, createPost, updatePost, deletePost };
