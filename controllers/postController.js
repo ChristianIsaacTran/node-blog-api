@@ -2,13 +2,16 @@ const db = require("../models/dbQuery");
 const { passport } = require("../authentication/passportConfig");
 
 // read all posts and sends back a json
-const readAllPosts = async (req, res) => {
-  const allPosts = await db.readAllPosts();
+const readAllPosts = [
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const allPosts = await db.readAllPosts();
 
-  res.json({
-    ...allPosts,
-  });
-};
+    res.json({
+      ...allPosts,
+    });
+  },
+];
 
 // reads a single post based on postId and sends back a json
 const readPost = [
