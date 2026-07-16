@@ -184,7 +184,32 @@ const readAllPosts = async () => {
       return allPosts;
     } else {
       return {
-        error: "Posts cannot read/find any posts to return",
+        error: "Cannot read/find any posts to return",
+      };
+    }
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+// readPost gets all post from the database and returns it
+const readPost = async (postId) => {
+  try {
+
+    // convert postId into an int for where clause
+    const intPostId = parseInt(postId);
+
+    const post = await prisma.post.findFirst({
+      where: {
+        id: intPostId,
+      },
+    });
+
+    if (post) {
+      return post;
+    } else {
+      return {
+        error: "Cannot read/find any posts to return",
       };
     }
   } catch (error) {
@@ -201,4 +226,5 @@ module.exports = {
   deleteUserThroughId,
   createPost,
   readAllPosts,
+  readPost,
 };

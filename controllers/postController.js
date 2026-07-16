@@ -12,8 +12,12 @@ const readAllPosts = async (req, res) => {
 
 // reads a single post based on postId and sends back a json
 const readPost = async (req, res) => {
+  const postId = req.params.postId;
+
+  const post = await db.readPost(postId);
+
   res.json({
-    testPost: "on readPost",
+    ...post,
   });
 };
 
