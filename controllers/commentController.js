@@ -46,8 +46,13 @@ const createComment = [
 const updateComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    const commentId = req.params.commentId;
+
+    const updatedComment = await db.updateComment(commentId, req); 
+
     res.json({
-      testComment: "on updateComment",
+      ...updatedComment
     });
   },
 ];

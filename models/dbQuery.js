@@ -366,6 +366,44 @@ const readComment = async (commentId) => {
   }
 };
 
+// finds and updates comment based on form fields and commentId. Returns an error if comment not found
+const updateComment = async (commentId, req) => {
+  try {
+    const intCommentId = parseInt(commentId);
+
+    // get updated comment data from form fields
+    const newCommentText = req.body.commentText;
+    const dateUpdated = new Date(req.body.commentUpdatedDate).toISOString();
+    const userId = parseInt(req.user.id);
+    const postId = parseInt(req.body.postId);
+
+    const updatedComment = await prisma.comment.update({
+      where: {
+        id: intCommentId,
+      },
+      data: {
+        commentText: newCommentText,
+        dateCommented: dateUpdated,
+        userId: userId,
+        postId: postId,
+      },
+    });
+
+    if (updatedComment) {
+      return updatedComment;
+    } else {
+      return {
+        error: "Cannot find/update comment",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Cannot find/update comment",
+    };
+  }
+};
+
 module.exports = {
   createUser,
   findUser,
@@ -381,4 +419,5 @@ module.exports = {
   readAllComments,
   readComment,
   createComment,
+  updateComment,
 };
