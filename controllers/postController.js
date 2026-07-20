@@ -43,8 +43,12 @@ const createPost = [
 const updatePost = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const postId = req.params.postId;
+
+    const updateResult = await db.updatePost(postId, req);
+
     res.json({
-      testPost: "on updatePost",
+      ...updateResult,
     });
   },
 ];

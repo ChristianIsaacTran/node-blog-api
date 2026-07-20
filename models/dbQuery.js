@@ -195,7 +195,6 @@ const readAllPosts = async () => {
 // readPost gets all post from the database and returns it
 const readPost = async (postId) => {
   try {
-
     // convert postId into an int for where clause
     const intPostId = parseInt(postId);
 
@@ -217,6 +216,55 @@ const readPost = async (postId) => {
   }
 };
 
+// gets and updates the post with form info and returns the updated post if successful. Sends back error if post couldn't be found
+const updatePost = async (postId, req) => {
+  try {
+    // convert postId to int for where clause
+    const intPostId = parseInt(postId);
+
+    // extract req.body form fields
+    const newTitle = req.body.title;
+    const newPostText = req.body.text;
+    const dateUpdated = new Date().toISOString();
+    const reqBool = req.body.postedStatus;
+
+    // assign boolean posted variable
+    let postStatus;
+
+    if (reqBool === "true") {
+      postStatus = true;
+    } else {
+      postStatus = false;
+    }
+
+    // Take optionally updated values and update them with new updated values
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: intPostId,
+      },
+      data: {
+        title: newTitle,
+        postText: newPostText,
+        datePosted: dateUpdated,
+        posted: postStatus,
+      },
+    });
+
+    if (updatedPost) {
+      return updatedPost;
+    } else {
+      return {
+        error: "Post not found/failed to update",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Post not found/failed to update",
+    };
+  }
+};
+
 module.exports = {
   createUser,
   findUser,
@@ -227,4 +275,5 @@ module.exports = {
   createPost,
   readAllPosts,
   readPost,
+  updatePost,
 };
