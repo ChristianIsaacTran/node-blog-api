@@ -98,13 +98,13 @@ const updateUserThroughId = async (updatedUserName, userId) => {
       return updatedUser;
     } else {
       return {
-        error: "User not found/failed to update.",
+        error: "User not found/failed to update user",
       };
     }
   } catch (error) {
     console.log(error);
     return {
-      error: "User not found/failed to update.",
+      error: "User not found/failed to update user",
     };
   }
 };
@@ -184,7 +184,7 @@ const readAllPosts = async () => {
       return allPosts;
     } else {
       return {
-        error: "Cannot read/find any posts to return",
+        error: "Cannot read/find any posts to return post",
       };
     }
   } catch (error) {
@@ -208,7 +208,7 @@ const readPost = async (postId) => {
       return post;
     } else {
       return {
-        error: "Cannot read/find any posts to return",
+        error: "Cannot read/find any posts to return post",
       };
     }
   } catch (error) {
@@ -254,13 +254,39 @@ const updatePost = async (postId, req) => {
       return updatedPost;
     } else {
       return {
-        error: "Post not found/failed to update",
+        error: "Post not found/failed to update post",
       };
     }
   } catch (error) {
     console.log(error);
     return {
-      error: "Post not found/failed to update",
+      error: "Post not found/failed to update post",
+    };
+  }
+};
+
+// finds and deletes post based on postId from the db
+const deletePost = async (postId) => {
+  try {
+    const intPostId = parseInt(postId);
+
+    // deletes a single post based on the converted postId
+    const deletedPost = await prisma.post.delete({
+      where: {
+        id: intPostId,
+      },
+    });
+
+    if (deletedPost) {
+      return deletedPost;
+    } else {
+      return {
+        error: "Post not found/failed to delete post",
+      };
+    }
+  } catch (error) {
+    return {
+      error: "Post not found/failed to delete post",
     };
   }
 };
@@ -276,4 +302,5 @@ module.exports = {
   readAllPosts,
   readPost,
   updatePost,
+  deletePost,
 };

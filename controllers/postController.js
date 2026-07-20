@@ -57,8 +57,13 @@ const updatePost = [
 const deletePost = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    const postId = req.params.postId;
+
+    const deleteResult = await db.deletePost(postId);
+
     res.json({
-      testPost: "on deletePost",
+      ...deleteResult
     });
   },
 ];
