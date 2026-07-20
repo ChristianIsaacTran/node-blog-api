@@ -225,7 +225,7 @@ const updatePost = async (postId, req) => {
     // extract req.body form fields
     const newTitle = req.body.title;
     const newPostText = req.body.text;
-    const dateUpdated = new Date().toISOString();
+    const dateUpdated = new Date(req.body.postUpdatedDate).toISOString();
     const reqBool = req.body.postedStatus;
 
     // assign boolean posted variable
