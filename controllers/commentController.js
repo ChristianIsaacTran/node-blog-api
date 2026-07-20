@@ -5,11 +5,10 @@ const { passport } = require("../authentication/passportConfig");
 const readAllComments = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-
     const allComments = await db.readAllComments();
 
     res.json({
-        ...allComments
+      ...allComments,
     });
   },
 ];
@@ -18,13 +17,12 @@ const readAllComments = [
 const readComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-
     const commentId = req.params.commentId;
 
     const foundComment = await db.readComment(commentId);
 
     res.json({
-      ...foundComment
+      ...foundComment,
     });
   },
 ];
@@ -33,11 +31,10 @@ const readComment = [
 const createComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-
     const newComment = await db.createComment(req);
 
     res.json({
-      ...newComment
+      ...newComment,
     });
   },
 ];
@@ -46,13 +43,12 @@ const createComment = [
 const updateComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-
     const commentId = req.params.commentId;
 
-    const updatedComment = await db.updateComment(commentId, req); 
+    const updatedComment = await db.updateComment(commentId, req);
 
     res.json({
-      ...updatedComment
+      ...updatedComment,
     });
   },
 ];
@@ -61,8 +57,12 @@ const updateComment = [
 const deleteComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const commentId = req.params.commentId;
+
+    const deletedComment = await db.deleteComment(commentId);
+
     res.json({
-      testComment: "on deleteComment",
+      ...deletedComment,
     });
   },
 ];

@@ -404,6 +404,32 @@ const updateComment = async (commentId, req) => {
   }
 };
 
+// finds and deletes a comment in db based on given commentId
+const deleteComment = async (commentId) => {
+  try {
+    const intCommentId = parseInt(commentId);
+
+    const deletedComment = await prisma.comment.delete({
+      where: {
+        id: intCommentId,
+      },
+    });
+
+    if (deletedComment) {
+      return deletedComment;
+    } else {
+      return {
+        error: "Cannot find/delete comment",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Cannot find/delete comment",
+    };
+  }
+};
+
 module.exports = {
   createUser,
   findUser,
@@ -420,4 +446,5 @@ module.exports = {
   readComment,
   createComment,
   updateComment,
+  deleteComment,
 };
