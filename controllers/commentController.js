@@ -18,8 +18,13 @@ const readAllComments = [
 const readComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    const commentId = req.params.commentId;
+
+    const foundComment = await db.readComment(commentId);
+
     res.json({
-      testComment: "on readComment",
+      ...foundComment
     });
   },
 ];

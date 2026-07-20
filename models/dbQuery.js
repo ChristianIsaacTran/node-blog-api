@@ -341,6 +341,31 @@ const createComment = async (req) => {
   }
 };
 
+// finds a comment based on commentId, returns single comment
+const readComment = async (commentId) => {
+  try {
+    const intCommentId = parseInt(commentId);
+
+    const foundComment = await prisma.comment.findFirst({
+      where: {
+        id: intCommentId,
+      },
+    });
+
+    if (foundComment) {
+      return foundComment;
+    } else {
+      return {
+        error: "Cannot find/return comment",
+      };
+    }
+  } catch (error) {
+    return {
+      error: "Cannot find/return comment",
+    };
+  }
+};
+
 module.exports = {
   createUser,
   findUser,
@@ -354,5 +379,6 @@ module.exports = {
   updatePost,
   deletePost,
   readAllComments,
+  readComment,
   createComment,
 };
