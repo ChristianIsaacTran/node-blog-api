@@ -291,6 +291,56 @@ const deletePost = async (postId) => {
   }
 };
 
+// find and returns all comments inside db
+const readAllComments = async () => {
+  try {
+    const allComments = await prisma.comment.findMany({});
+
+    if (allComments) {
+      return allComments;
+    } else {
+      return {
+        error: "Couldn't return all comments",
+      };
+    }
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+// creates a comment record based on form data and returns new comment inserted into db
+const createComment = async (req) => {
+  try {
+    // extract comment information from json
+    const text = req.body.commentText;
+    const dateCommented = new Date(req.body.dateCommented).toISOString(); //time when comment was created
+    const userId = parseInt(req.user.id);
+    const postId = parseInt(req.body.postId);
+
+    const newComment = await prisma.comment.create({
+      data: {
+        commentText: text,
+        dateCommented: dateCommented,
+        userId: userId,
+        postId: postId,
+      },
+    });
+
+    if (newComment) {
+      return newComment;
+    } else {
+      return {
+        error: "Cannot create comment",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Cannot create comment",
+    };
+  }
+};
+
 module.exports = {
   createUser,
   findUser,
@@ -303,4 +353,6 @@ module.exports = {
   readPost,
   updatePost,
   deletePost,
+  readAllComments,
+  createComment,
 };

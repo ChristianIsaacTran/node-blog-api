@@ -5,8 +5,11 @@ const { passport } = require("../authentication/passportConfig");
 const readAllComments = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    const allComments = await db.readAllComments();
+
     res.json({
-      testComment: "on readAllComments",
+        ...allComments
     });
   },
 ];
@@ -25,8 +28,11 @@ const readComment = [
 const createComment = [
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+
+    const newComment = await db.createComment(req);
+
     res.json({
-      testComment: "on createComment",
+      ...newComment
     });
   },
 ];
